@@ -47,6 +47,8 @@ Ergo42 Moduloとの組み合わせを想定した動作確認の方法を説明�
 以上の手順により、無線キーボードとしての動作確認ができます。
 これ以降、スレーブ側のみを起動したとしても**Nordic UART**はデバイス一覧に表示されません。
 
-
-
+##　ビルド環境構築
+基本的には[BLE Micro Pro](https://github.com/sekigon-gonnoc/BLE-Micro-Pro)
+のものを参照してください。
+ただし、SDKは[v12.3.0](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download#infotabs)をダウンロードし(技適の都合)、環境変数の名前は**NRFSDK12_ROOT**としてください。
 
