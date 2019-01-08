@@ -26,7 +26,7 @@ Ergo42 Moduloとの組み合わせを想定した動作確認の方法を説明�
 
 1. [Release](https://github.com/sekigon-gonnoc/modulo-bt-pendant/releases)からデモプログラムをダウンロード
 
-1. BT Pendantのデバッグ用スルーホール(V,S,C,/R,G,T,R)のうち、GとRをショートさせながら電源を投入(ブートローダが起動します。初回は不要です。)
+1. BT Pendantのデバッグ用ポート(V,S,C,/R,G,T,R)のうち、GとRをショートさせながら電源を投入(ブートローダが起動します。初回は不要です。)
 
 1. nRF ToolboxでDFUを選択し起動
 
@@ -54,13 +54,33 @@ Ergo42 Moduloとの組み合わせを想定した動作確認の方法を説明�
 のものを参照してください。
 ただし、SDKは[v12.3.0](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download#infotabs)をダウンロードし(技適の都合)、環境変数の名前は**NRFSDK12_ROOT**としてください。
 
-## 書き込み用パッケージ生成
+## hexファイルから書き込み用パッケージの生成
 1. [nrfutil.exe](https://github.com/NordicSemiconductor/pc-nrfutil/releases)をダウンロードあるいはpipからインストール(python2.7)
 
 1. [Release](https://github.com/sekigon-gonnoc/modulo-bt-pendant/releases)から`modulo_bt_pendant.pem`をダウンロード
 
 1. nrfutilを使ってパッケージを生成
 
-```nrfutil pkg generate --application FIRMWARE_NAME.hex --debug-mode --hw-version 0 --sd-req 0x8c --key-file modulo_bt_pendant.pem FIRMWARE_NAME.zip```
+```
+nrfutil pkg generate --application FIRMWARE_NAME.hex --debug-mode --hw-version 0 --sd-req 0x8c --key-file modulo_bt_pendant.pem FIRMWARE_NAME.zip
+```
 
+## SWDを使った書き込み
+
+CMSIS-DAPとOpenOCD(0.10.0)を使った書き込み方法を説明します。OpenOCDはST-Link等にも対応しているはずですが未確認です。
+
+### 書き込み機との接続
+デバッグ用ポート(V,S,C,/R,G,T,R)のSをSWDIO,　CをSWCLKに接続
+
+### 初期化とソフトデバイスの書き込み
+この手順は最初に一度実行すれば以降は不要です。
+```
+openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit
+```
+
+### ファームウェアの書き込み
+
+```
+openocd.exe -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "program FIRMWARE_NAME.hex verify" -c "reset" -c exit
+```
 
