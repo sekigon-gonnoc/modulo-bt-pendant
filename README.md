@@ -54,3 +54,13 @@ Ergo42 Moduloとの組み合わせを想定した動作確認の方法を説明�
 のものを参照してください。
 ただし、SDKは[v12.3.0](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK/Download#infotabs)をダウンロードし(技適の都合)、環境変数の名前は**NRFSDK12_ROOT**としてください。
 
+## 書き込み用パッケージ生成
+1. [nrfutil.exe](https://github.com/NordicSemiconductor/pc-nrfutil/releases)をダウンロードあるいはpipからインストール(python2.7)
+
+1. [Release](https://github.com/sekigon-gonnoc/modulo-bt-pendant/releases)から`modulo_bt_pendant.pem`をダウンロード
+
+1. nrfutilを使ってパッケージを生成
+
+```nrfutil pkg generate --application FIRMWARE_NAME.hex --debug-mode --hw-version 0 --sd-req 0x8c --key-file modulo_bt_pendant.pem FIRMWARE_NAME.zip```
+
+
